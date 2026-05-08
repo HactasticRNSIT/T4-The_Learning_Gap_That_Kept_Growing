@@ -4,17 +4,20 @@ import {
   AlertTriangle,
   BarChart3,
   Brain,
+  Bot,
   GraduationCap,
   LayoutDashboard,
   LogOut,
   Menu,
   PlusCircle,
+  School,
   Sparkles,
+  TrendingUp,
   Users,
   X,
 } from 'lucide-react'
 import { useState } from 'react'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 const navItems = [
   { label: 'Overview', path: '/dashboard', icon: LayoutDashboard, end: true },
@@ -23,6 +26,12 @@ const navItems = [
   { label: 'AI Insights', path: '/dashboard/ai-insights', icon: Brain },
   { label: 'Learning Gaps', path: '/dashboard/learning-gaps', icon: GraduationCap },
   { label: 'Risk Alerts', path: '/dashboard/risk-alerts', icon: AlertTriangle },
+  { label: 'Teacher Intel', path: '/dashboard/teacher-intelligence', icon: BarChart3 },
+  { label: 'Student Portal', path: '/dashboard/student-portal', icon: GraduationCap },
+  { label: 'Parent Portal', path: '/dashboard/parent-portal', icon: Users },
+  { label: 'Admin Portal', path: '/dashboard/admin-portal', icon: School },
+  { label: 'Prediction Engine', path: '/dashboard/prediction-engine', icon: TrendingUp },
+  { label: 'Academic Copilot', path: '/dashboard/academic-copilot', icon: Bot },
 ]
 
 function DashboardLayout() {

@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { AlertCircle, Eye, EyeOff, Lock, Mail } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
+import { getPortalPath } from '../utils/roles'
 
 function Login() {
   const navigate = useNavigate()
@@ -19,8 +20,8 @@ function Login() {
     setError('')
 
     try {
-      await login(form.email, form.password)
-      navigate(location.state?.from?.pathname || '/dashboard')
+      const result = await login(form.email, form.password)
+      navigate(location.state?.from?.pathname || getPortalPath(result.profile?.role))
     } catch (err) {
       setError(err.message)
     } finally {
@@ -34,7 +35,7 @@ function Login() {
         <div className="glass-panel rounded-lg p-6 sm:p-8">
           <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-200">Secure access</p>
           <h1 className="mt-3 text-3xl font-black text-white">Login to AstraLearn</h1>
-          <p className="mt-2 text-sm text-slate-400">Verified teacher accounts can access the dashboard.</p>
+          <p className="mt-2 text-sm text-slate-400">Verified users open their dedicated Teacher, Student, Parent, or Admin portal.</p>
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <label className="block">

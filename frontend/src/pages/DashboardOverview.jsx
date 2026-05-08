@@ -16,8 +16,8 @@ import {
 } from 'recharts'
 import EmptyState from '../components/EmptyState'
 import PageHeader from '../components/PageHeader'
-import { normalizeRisk } from '../components/StatusBadge'
 import { useStudents } from '../hooks/useStudents'
+import { normalizeRisk } from '../utils/risk'
 
 const riskColors = {
   High: '#fb7185',

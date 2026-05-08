@@ -2,4 +2,4 @@
 > backend@1.0.0 start
 > node src/server.js
 
-AstraLearn backend running on port 5000
+AstraLearn backend running on port 5001

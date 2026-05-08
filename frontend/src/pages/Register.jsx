@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { AlertCircle, CheckCircle2, Mail, Phone, User } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
+import { AlertCircle, CheckCircle2, Mail, Phone, ShieldCheck, User } from 'lucide-react'
+import { useAuth } from '../hooks/useAuth'
+import { getPortalPath, roles } from '../utils/roles'
 
 function Register() {
   const navigate = useNavigate()
   const { register, verifyCurrentUser } = useAuth()
-  const [form, setForm] = useState({ name: '', phone: '', email: '', password: '' })
+  const [form, setForm] = useState({ name: '', phone: '', email: '', password: '', role: 'teacher' })
   const [verificationSent, setVerificationSent] = useState(false)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -35,8 +36,8 @@ function Register() {
     setError('')
 
     try {
-      await verifyCurrentUser()
-      navigate('/dashboard')
+      const result = await verifyCurrentUser()
+      navigate(getPortalPath(result.profile?.role || form.role))
     } catch (err) {
       setError(err.message)
     } finally {
@@ -48,10 +49,10 @@ function Register() {
     <section className="grid min-h-[calc(100vh-153px)] place-items-center px-4 py-16">
       <motion.div initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-2xl">
         <div className="glass-panel rounded-lg p-6 sm:p-8">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-200">Teacher onboarding</p>
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-cyan-200">Role-based onboarding</p>
           <h1 className="mt-3 text-3xl font-black text-white">Create your AstraLearn account</h1>
           <p className="mt-2 text-sm text-slate-400">
-            Firebase Auth creates your account and requires email verification before dashboard access.
+            Choose your role once. AstraLearn stores it in Firestore and opens the correct portal after login.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 grid gap-4 md:grid-cols-2">
@@ -66,6 +67,24 @@ function Register() {
                   onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
                   placeholder="Ananya Rao"
                 />
+              </div>
+            </label>
+
+            <label className="md:col-span-2">
+              <span className="mb-2 block text-sm font-semibold text-slate-200">Account Role</span>
+              <div className="relative">
+                <ShieldCheck className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                <select
+                  className="field pl-10"
+                  value={form.role}
+                  onChange={(event) => setForm((prev) => ({ ...prev, role: event.target.value }))}
+                >
+                  {Object.entries(roles).map(([value, role]) => (
+                    <option key={value} value={value}>
+                      {role.label} - {role.description}
+                    </option>
+                  ))}
+                </select>
               </div>
             </label>
 

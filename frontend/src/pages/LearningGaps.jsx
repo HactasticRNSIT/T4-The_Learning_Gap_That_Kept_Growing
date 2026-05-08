@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+import { PlusCircle } from 'lucide-react'
 import EmptyState from '../components/EmptyState'
 import PageHeader from '../components/PageHeader'
 import StatusBadge from '../components/StatusBadge'
@@ -16,7 +18,16 @@ function LearningGaps() {
       {error && <div className="mb-6 rounded-lg border border-rose-300/20 bg-rose-400/10 p-4 text-rose-100">{error}</div>}
 
       {students.length === 0 && !loading ? (
-        <EmptyState title="No learning gaps detected yet" />
+        <EmptyState
+          title="No learning gaps detected yet"
+          description="Add student scores and remarks so AstraLearn can detect weak concepts and generate interventions."
+          action={
+            <Link to="/teacher/add-student" className="primary-button">
+              <PlusCircle size={18} />
+              Add Student
+            </Link>
+          }
+        />
       ) : (
         <div className="space-y-4">
           {(loading ? Array.from({ length: 5 }) : students).map((student, index) => (

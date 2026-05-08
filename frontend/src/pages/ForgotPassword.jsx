@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { AlertCircle, CheckCircle2, Mail } from 'lucide-react'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../hooks/useAuth'
 
 function ForgotPassword() {
   const { resetPassword } = useAuth()
@@ -13,15 +13,17 @@ function ForgotPassword() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    const cleanEmail = email.trim().toLowerCase()
     setLoading(true)
     setError('')
     setStatus('')
 
     try {
-      await resetPassword(email)
-      setStatus('Password reset email sent. Check your inbox for the Firebase reset link.')
+      await resetPassword(cleanEmail)
+      setEmail(cleanEmail)
+      setStatus(`Password reset email sent to ${cleanEmail}. Check your inbox and spam folder.`)
     } catch (err) {
-      setError(err.message)
+      setError(getResetErrorMessage(err))
     } finally {
       setLoading(false)
     }
@@ -80,3 +82,30 @@ function ForgotPassword() {
 }
 
 export default ForgotPassword
+
+function getResetErrorMessage(error) {
+  const code = error?.code || ''
+  const message = error?.message || ''
+
+  if (code.includes('auth/invalid-email')) {
+    return 'Enter a valid email address.'
+  }
+
+  if (code.includes('auth/user-not-found')) {
+    return 'No AstraLearn account exists with this email.'
+  }
+
+  if (code.includes('auth/too-many-requests')) {
+    return 'Too many reset attempts. Please wait a few minutes and try again.'
+  }
+
+  if (code.includes('auth/unauthorized-continue-uri') || code.includes('auth/invalid-continue-uri')) {
+    return 'This app URL is not allowed in Firebase Auth. Add this localhost/deployed domain in Firebase Authentication authorized domains.'
+  }
+
+  if (message.toLowerCase().includes('network')) {
+    return 'Network error while sending the reset link. Please check your connection and try again.'
+  }
+
+  return message || 'Unable to send password reset email right now.'
+}

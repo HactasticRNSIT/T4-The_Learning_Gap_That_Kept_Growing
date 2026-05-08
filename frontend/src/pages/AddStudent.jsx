@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
 import PageHeader from '../components/PageHeader'
+import { useAuth } from '../hooks/useAuth'
 import { addStudent } from '../services/studentService'
 
 const initialForm = {
   name: '',
+  email: '',
+  parentEmail: '',
   grade: '',
   attendance: '',
   mathScore: '',
@@ -17,6 +20,7 @@ const initialForm = {
 
 function AddStudent() {
   const navigate = useNavigate()
+  const { currentUser, userProfile } = useAuth()
   const [form, setForm] = useState(initialForm)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -33,13 +37,17 @@ function AddStudent() {
     try {
       await addStudent({
         ...form,
+        email: form.email.trim().toLowerCase(),
+        parentEmail: form.parentEmail.trim().toLowerCase(),
+        teacherEmail: currentUser?.email?.trim().toLowerCase() || '',
+        teacherName: userProfile?.name || currentUser?.displayName || '',
         attendance: Number(form.attendance),
         mathScore: Number(form.mathScore),
         physicsScore: Number(form.physicsScore),
         chemistryScore: Number(form.chemistryScore),
       })
       setForm(initialForm)
-      navigate('/dashboard/students')
+      navigate('/teacher/students')
     } catch (err) {
       setError(err.message)
     } finally {
@@ -68,6 +76,30 @@ function AddStudent() {
         <label>
           <span className="mb-2 block text-sm font-semibold text-slate-200">Grade</span>
           <input className="field" name="grade" required value={form.grade} onChange={updateField} placeholder="Grade 10" />
+        </label>
+
+        <label>
+          <span className="mb-2 block text-sm font-semibold text-slate-200">Student Email</span>
+          <input
+            className="field"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={updateField}
+            placeholder="student@school.edu"
+          />
+        </label>
+
+        <label>
+          <span className="mb-2 block text-sm font-semibold text-slate-200">Parent Email</span>
+          <input
+            className="field"
+            name="parentEmail"
+            type="email"
+            value={form.parentEmail}
+            onChange={updateField}
+            placeholder="parent@email.com"
+          />
         </label>
 
         <label>

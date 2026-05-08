@@ -1,6 +1,6 @@
 import { Database } from 'lucide-react'
 
-function EmptyState({ title = 'No records yet', description = 'Add your first student to activate the intelligence layer.' }) {
+function EmptyState({ title = 'No records yet', description = 'Add your first student to activate the intelligence layer.', action }) {
   return (
     <div className="grid min-h-64 place-items-center rounded-lg border border-dashed border-white/15 bg-white/[0.03] p-8 text-center">
       <div>
@@ -9,6 +9,7 @@ function EmptyState({ title = 'No records yet', description = 'Add your first st
         </div>
         <h2 className="text-xl font-bold text-white">{title}</h2>
         <p className="mt-2 max-w-md text-sm text-slate-400">{description}</p>
+        {action && <div className="mt-5">{action}</div>}
       </div>
     </div>
   )

@@ -1,0 +1,10 @@
+
+> frontend@0.0.0 dev
+> vite --host 127.0.0.1 --port 5176
+
+
+  [32m[1mVITE[22m v8.0.11[39m  [2mready in [0m[1m192[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m5176[22m/[39m
+[2m4:32:35 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/PortalWorkspace.jsx, /src/styles/global.css[22m
+[2m4:33:10 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/IntelligenceSuite.jsx, /src/styles/global.css[22m

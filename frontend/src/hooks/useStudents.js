@@ -21,8 +21,29 @@ export function useStudents() {
   }, [])
 
   useEffect(() => {
-    refresh()
-  }, [refresh])
+    let ignore = false
+
+    getStudents()
+      .then((data) => {
+        if (!ignore) {
+          setStudents(data)
+        }
+      })
+      .catch((err) => {
+        if (!ignore) {
+          setError(err.message)
+        }
+      })
+      .finally(() => {
+        if (!ignore) {
+          setLoading(false)
+        }
+      })
+
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   return { students, loading, error, refresh }
 }
